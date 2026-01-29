@@ -1,17 +1,33 @@
 {
   "name": "prodoc",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "description": "document reader api that uses ai to read the whole pdf or file and then format it for users",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "gordian okon",
   "license": "ISC",
   "packageManager": "pnpm@10.27.0",
   "dependencies": {
-    "hono": "^4.11.7"
+    "@hono/node-server": "^1.19.9",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
+    "file-type": "^21.3.0",
+    "hono": "^4.11.7",
+    "pdf-parse": "^2.4.5",
+    "sharp": "^0.34.5",
+    "tesseract.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.1.0",
+    "@types/pdf-parse": "^1.1.5",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }

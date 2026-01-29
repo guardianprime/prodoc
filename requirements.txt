@@ -1,0 +1,268 @@
+Adding TypeScript to Your Existing Project
+1. Install TypeScript Dependencies
+bashpnpm add -D typescript @types/node
+pnpm add -D tsx  # For running TypeScript directly in development
+If using Bun runtime specifically:
+bashpnpm add -D @types/bun
+2. Create TypeScript Configuration
+Create tsconfig.json in your root directory:
+bashpnpm tsc --init
+Or create it manually with these recommended settings:
+Key settings to configure:
+
+target: "ES2022" or "ESNext"
+module: "ESNext" (for modern imports)
+moduleResolution: "bundler" (if using Bun) or "node"
+rootDir: "./src"
+outDir: "./dist"
+strict: true
+esModuleInterop: true
+skipLibCheck: true
+resolveJsonModule: true
+allowImportingTsExtensions: true (if using Bun)
+noEmit: true (if using Bun, it doesn't need compilation)
+
+3. Update Package.json Scripts
+Add these scripts to your package.json:
+If using Bun:
+json"scripts": {
+  "dev": "bun run --watch src/index.ts",
+  "start": "bun run src/index.ts",
+  "build": "bun build src/index.ts --outdir ./dist --target bun",
+  "typecheck": "tsc --noEmit"
+}
+If using Node.js:
+json"scripts": {
+  "dev": "tsx watch src/index.ts",
+  "start": "node dist/index.js",
+  "build": "tsc",
+  "typecheck": "tsc --noEmit"
+}
+4. Migrate Existing Files to TypeScript
+Rename your files:
+
+.js files → .ts
+If you have React/JSX → .tsx
+
+Move files into src/ directory:
+
+Create src/ folder if you don't have one
+Move your entry file (probably index.js) to src/index.ts
+Move other files into appropriate subdirectories
+
+5. Install Core Dependencies
+Now install the project dependencies:
+bash# Framework
+pnpm add hono
+
+# OCR & Image Processing
+pnpm add tesseract.js sharp pdf-parse
+pnpm add -D @types/pdf-parse
+
+# AI SDKs (choose what you need)
+pnpm add openai
+# OR
+pnpm add @anthropic-ai/sdk
+# OR
+pnpm add @google/generative-ai
+
+# Database
+pnpm add drizzle-orm postgres
+pnpm add -D drizzle-kit
+
+# Validation
+pnpm add zod
+
+# Queue System
+pnpm add bullmq ioredis
+pnpm add -D @types/ioredis
+
+# Utilities
+pnpm add dotenv file-type date-fns
+```
+
+### **6. Update Your Project Structure**
+
+Move your existing files into this structure:
+```
+intelligent-doc-processor/
+├── src/
+│   ├── index.ts              # Your main file (renamed from index.js)
+│   ├── routes/
+│   ├── services/
+│   ├── db/
+│   ├── types/
+│   ├── utils/
+│   └── middleware/
+├── uploads/
+├── processed/
+├── node_modules/
+├── package.json
+├── pnpm-lock.yaml
+├── tsconfig.json
+└── .env
+7. Fix Type Errors in Existing Code
+When you convert to TypeScript, you'll likely see errors:
+Common fixes needed:
+Add type annotations:
+
+Function parameters need types
+Function return types are recommended
+Variable types can often be inferred
+
+Import statements:
+
+Make sure imports are correct
+May need to add .js extension in some cases
+Check if libraries have TypeScript types
+
+Any types:
+
+TypeScript might complain about implicit any
+Add proper types or use unknown temporarily
+Can disable strict mode initially if needed
+
+8. Start with Loose TypeScript Settings
+If you're getting too many errors initially, you can loosen TypeScript temporarily:
+In tsconfig.json, you can set:
+
+strict: false (initially)
+noImplicitAny: false
+strictNullChecks: false
+
+Then gradually enable these as you add types
+9. Create Your First TypeScript File
+If starting fresh with the main file, here's a basic Hono setup:
+src/index.ts:
+Basic structure:
+
+Import Hono
+Create app instance with type
+Define routes with proper types
+Add middleware
+Export default app
+Start server
+
+Hono with types:
+
+Hono has excellent TypeScript support
+Routes are type-safe
+Context is strongly typed
+
+10. Add Environment Variables Setup
+Create .env file (same as before)
+Create src/utils/config.ts:
+
+Import dotenv
+Load environment variables
+Export typed config object
+Add validation for required vars
+
+Type your config:
+
+Create interface for config
+Ensure all env vars have proper types
+Provide defaults where appropriate
+
+11. Working with PNPM
+PNPM-specific tips:
+Installing packages:
+
+pnpm add <package> - Add to dependencies
+pnpm add -D <package> - Add to devDependencies
+pnpm add -g <package> - Global install
+
+Useful commands:
+
+pnpm install - Install all dependencies
+pnpm update - Update packages
+pnpm remove <package> - Remove package
+pnpm why <package> - Why is package installed?
+
+PNPM workspace (if you want monorepo later):
+
+Can organize services into workspace
+Share dependencies efficiently
+Good for scaling later
+
+12. Development Workflow
+Testing TypeScript setup:
+
+Run pnpm typecheck to check for errors
+Run pnpm dev to start development server
+Make a small change to test hot reload
+Check if types are working
+
+If using Bun:
+
+Bun has native TypeScript support
+No build step needed in development
+Very fast hot reload
+
+If using Node.js:
+
+Use tsx for development
+Need to build for production
+Slightly slower but more compatible
+
+13. Gradual Migration Strategy
+If you already have JavaScript code:
+Option 1 - Aggressive:
+
+Rename all .js to .ts at once
+Fix all type errors
+Takes more time upfront
+
+Option 2 - Gradual:
+
+Rename files one at a time
+Start with utility files
+Move to services
+Finally routes and main file
+Easier to manage
+
+Can use both JS and TS together:
+
+TypeScript can import JavaScript
+Migrate at your own pace
+Set allowJs: true in tsconfig.json
+
+14. Common PNPM + TypeScript Issues
+Module resolution:
+
+If imports aren't resolving, check moduleResolution in tsconfig
+PNPM strict mode can cause issues
+May need to add shamefully-hoist=true in .npmrc
+
+Type definitions:
+
+Not all packages have TypeScript types
+Install from @types/ namespace
+Or create your own .d.ts files
+
+Path aliases:
+
+Can set up in tsconfig.json
+Makes imports cleaner
+Example: @/services instead of ../../../services
+
+15. Next Steps After TypeScript Setup
+Once TypeScript is working:
+
+Define your types - Create interfaces for all data structures
+Set up database schema - Use Drizzle with TypeScript
+Create Zod schemas - For runtime validation + type inference
+Build routes - With typed request/response
+Add services - With proper type safety
+Test thoroughly - TypeScript catches many bugs early
+
+Quick Start Checklist
+
+ Install TypeScript and types: pnpm add -D typescript @types/node
+ Create tsconfig.json
+ Create src/ directory
+ Rename/move files to .ts
+ Update package.json scripts
+ Install project dependencies with pnpm
+ Run pnpm typecheck to verify
+ Run pnpm dev to test
