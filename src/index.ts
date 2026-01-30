@@ -1,12 +1,13 @@
-import { Hono } from "hono";
-import type { Context } from "hono";
-import { serve } from "@hono/node-server";
+import express, { Request, Response } from "express";
 
-const app = new Hono();
+const app = express();
 
-app.get("/", (c: Context) => c.text("Hello from the server Node.js!"));
+const port = 8000;
 
-serve({
-  fetch: app.fetch.bind(app),
-  port: 8000,
+app.get("/", (req: Request, res: Response) => {
+  res.send("working here");
+});
+
+app.listen(port, () => {
+  console.log(`server is running on localhost:${port}`);
 });
