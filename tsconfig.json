@@ -4,10 +4,11 @@
     "module": "NodeNext",
     "types": ["node"],
     "moduleResolution": "NodeNext",
-    "rootDir": "src",
-    "outDir": "dist",
-    "strict": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": ["drizzle.config.ts", "drizzle/**", "node_modules"]
 }

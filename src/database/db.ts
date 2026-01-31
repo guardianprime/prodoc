@@ -1,8 +1,7 @@
 import { Pool } from "pg";
-import { DATABASE_URL } from "../utils/config.js";
 
 const pool = new Pool({
-  connectionString: DATABASE_URL,
+  connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false,
   },

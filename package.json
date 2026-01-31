@@ -8,7 +8,11 @@
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "drizzle": "pnpm build && drizzle-kit generate",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "keywords": [],
   "author": "gordian okon",
@@ -31,6 +35,7 @@
     "@types/node": "^25.1.0",
     "@types/pdf-parse": "^1.1.5",
     "@types/pg": "^8.16.0",
+    "drizzle-kit": "^0.31.8",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
