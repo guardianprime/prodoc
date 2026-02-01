@@ -1,23 +1,29 @@
-import express from "express";
+import Fastify from "fastify";
 import documentRouter from "./routes/documents.js";
 import pool from "./database/db.js";
 
-const app = express();
+/**
+ * @type {import('fastify').FastifyInstance}
+ */
+
+const fastify = Fastify({
+  logger: true,
+});
+
 const port = 8000;
 
-app.use(express.json());
-app.use("/api/v1/document", documentRouter);
+fastify.register(documentRouter);
 
 async function startServer() {
   try {
     await pool.query("SELECT 1");
     console.log("Database connected");
 
-    app.listen(port, () => {
-      console.log(`Server running on http://localhost:${port}`);
+    fastify.listen({ port: 3000 }, function (address) {
+      fastify.log.info(`server listening on ${address}`);
     });
   } catch (err) {
-    console.error("Startup failed", err);
+    fastify.log.error(err);
     process.exit(1);
   }
 }
