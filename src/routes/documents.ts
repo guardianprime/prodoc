@@ -1,20 +1,16 @@
 // # Document upload/processing routes
-/**
- * Encapsulates the routes
- * @param {FastifyInstance} fastify  Encapsulated Fastify Instance
- * @param {Object} options plugin options, refer to https://fastify.dev/docs/latest/Reference/Plugins/#plugin-options
- */
+import { FastifyInstance } from "fastify";
 
-async function documentRouter(fastify, options) {
+async function documentRouter(fastify: FastifyInstance) {
   fastify.get("/", async (request, reply) => {
-    return { hello: "document route" };
+    return reply.code(200).send("document route");
     // List all documents
     // Add pagination
     // Filter by status, type, date
   });
 
   fastify.post("/upload", async (request, reply) => {
-    return { hello: "document route" };
+    return reply.code(201).send("document route");
     // Accept multipart form data
     // Validate file type and size
     // Save file to uploads directory
@@ -24,20 +20,20 @@ async function documentRouter(fastify, options) {
   });
 
   fastify.post("/process:id", async (request, reply) => {
-    return { hello: "document route" };
+    return reply.code(201).send("document route");
     // Trigger manual processing
     // Useful for reprocessing failed documents
   });
 
   fastify.get("/:id", async (request, reply) => {
-    return { hello: "document route" };
+    return reply.code(200).send("document route");
     // Fetch document by ID
     // Return metadata and extracted data
     // Include processing status
   });
 
   fastify.get("/:id/status", async (request, reply) => {
-    return { hello: "document route" };
+    return reply.code(200).send("document route");
     // Return just the processing status
     // For polling during background processing
   });

@@ -12,7 +12,7 @@ const fastify = Fastify({
 
 const port = 8000;
 
-fastify.register(documentRouter);
+fastify.register(documentRouter, { prefix: "/document" });
 
 async function startServer() {
   try {
