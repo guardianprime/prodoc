@@ -1,28 +1,24 @@
 import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 import { DATABASE_URL } from "../utils/config.js";
 
-const isProduction = process.env.NODE_ENV === "production";
-console.log(DATABASE_URL);
-console.log(process.env.NODE_ENV);
-
 if (!DATABASE_URL || typeof DATABASE_URL !== "string") {
-  console.error("Missing or invalid DATABASE_URL environment variable");
-  throw new Error("Missing or invalid DATABASE_URL environment variable");
+  throw new Error("Missing or invalid DATABASE_URL");
 }
 
-// Enable SSL for remote/hosted databases (e.g., Render, AWS RDS)
-// Disable only for localhost connections
 const isLocalhost =
   DATABASE_URL.includes("localhost") || DATABASE_URL.includes("127.0.0.1");
-const sslConfig = isLocalhost ? false : { rejectUnauthorized: false };
 
 const pool = new Pool({
   connectionString: DATABASE_URL,
-  ssl: sslConfig,
+  ssl: isLocalhost ? false : { rejectUnauthorized: true },
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
 pool.on("connect", () => {
-  console.log("PostgreSQL connected");
+  console.log("database connected");
 });
 
 pool.on("error", (err) => {
@@ -30,4 +26,4 @@ pool.on("error", (err) => {
   process.exit(1);
 });
 
-export default pool;
+export const db = drizzle(pool);
